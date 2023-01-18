@@ -12,6 +12,7 @@ Other changes I'd like to make:
 
 - Use lower-case for the action names (`get()` rather than `GET()`) - purely a personal preference
 - Use kotlinx.serialization rather than guava for serialization/deserialization
+- Move to the `gradle.kts` kotlin format for build files
 
 General observations:
 
