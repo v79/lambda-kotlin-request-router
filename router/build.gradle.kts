@@ -1,4 +1,4 @@
-
+group = "com.github.moia-dev"
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))

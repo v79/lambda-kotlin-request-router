@@ -5,6 +5,8 @@ plugins {
     id("com.google.protobuf") version "0.8.19"
 }
 
+group = "com.github.moia-dev"
+
 repositories {
     mavenCentral()
 }

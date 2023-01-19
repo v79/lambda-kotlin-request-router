@@ -18,7 +18,7 @@ plugins {
 }
 
 group = "com.github.moia-dev"
-version = "1.1-SNAPSHOT"
+version = "1.2-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -39,6 +39,8 @@ subprojects {
     apply(plugin = "jacoco")
     apply(plugin = "maven-publish")
     apply(plugin = "org.jmailen.kotlinter")
+
+    version = "1.2-SNAPSHOT"
 
     tasks {
         withType<KotlinCompile> {

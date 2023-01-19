@@ -1,3 +1,5 @@
+group = "com.github.moia-dev"
+
 repositories {
     mavenCentral()
 }
