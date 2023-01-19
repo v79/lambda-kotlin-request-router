@@ -25,7 +25,7 @@ class APIGatewayProxyEventExtensionsTest {
 
     @Test
     fun `should add location header`() {
-        val request = GET()
+        val request = get()
             .withHeader("Host", "example.com")
             .withHeader("X-Forwarded-Proto", "http")
             .withHeader("X-Forwarded-Port", "8080")
@@ -38,7 +38,7 @@ class APIGatewayProxyEventExtensionsTest {
 
     @Test
     fun `should add location header with default host and proto and without port`() {
-        val request = GET()
+        val request = get()
 
         val response = APIGatewayProxyResponseEvent()
             .withLocationHeader(request, "/some/path")
@@ -48,7 +48,7 @@ class APIGatewayProxyEventExtensionsTest {
 
     @Test
     fun `should omit default https port`() {
-        val request = GET()
+        val request = get()
             .withHeader("Host", "example.com")
             .withHeader("X-Forwarded-Proto", "https")
             .withHeader("X-Forwarded-Port", "443")
@@ -60,7 +60,7 @@ class APIGatewayProxyEventExtensionsTest {
 
     @Test
     fun `should omit default http port`() {
-        val request = GET()
+        val request = get()
             .withHeader("Host", "example.com")
             .withHeader("X-Forwarded-Proto", "http")
             .withHeader("X-Forwarded-Port", "80")

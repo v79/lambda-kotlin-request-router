@@ -39,16 +39,16 @@ fun APIGatewayProxyRequestEvent.getHeaderCaseInsensitive(httpHeader: String): St
 fun APIGatewayProxyResponseEvent.getHeaderCaseInsensitive(httpHeader: String): String? =
     getCaseInsensitive(httpHeader, headers)
 
-fun GET() = APIGatewayProxyRequestEvent().withHttpMethod("get").withHeaders(mutableMapOf())
-fun GET(path: String) = GET().withPath(path)
-fun POST() = APIGatewayProxyRequestEvent().withHttpMethod("post").withHeaders(mutableMapOf())
-fun POST(path: String) = POST().withPath(path)
-fun PUT() = APIGatewayProxyRequestEvent().withHttpMethod("put").withHeaders(mutableMapOf())
-fun PUT(path: String) = PUT().withPath(path)
-fun PATCH() = APIGatewayProxyRequestEvent().withHttpMethod("patch").withHeaders(mutableMapOf())
-fun PATCH(path: String) = PATCH().withPath(path)
-fun DELETE() = APIGatewayProxyRequestEvent().withHttpMethod("delete").withHeaders(mutableMapOf())
-fun DELETE(path: String) = DELETE().withPath(path)
+fun get() = APIGatewayProxyRequestEvent().withHttpMethod("get").withHeaders(mutableMapOf())
+fun get(path: String) = get().withPath(path)
+fun post() = APIGatewayProxyRequestEvent().withHttpMethod("post").withHeaders(mutableMapOf())
+fun post(path: String) = post().withPath(path)
+fun put() = APIGatewayProxyRequestEvent().withHttpMethod("put").withHeaders(mutableMapOf())
+fun put(path: String) = put().withPath(path)
+fun patch() = APIGatewayProxyRequestEvent().withHttpMethod("patch").withHeaders(mutableMapOf())
+fun patch(path: String) = patch().withPath(path)
+fun delete() = APIGatewayProxyRequestEvent().withHttpMethod("delete").withHeaders(mutableMapOf())
+fun delete(path: String) = delete().withPath(path)
 
 /**
  * Get a URI that can be used as location header for responses.

@@ -1,7 +1,7 @@
 package io.moia.router.openapi
 
 import io.mockk.mockk
-import io.moia.router.GET
+import io.moia.router.get
 import io.moia.router.Request
 import io.moia.router.RequestHandler
 import io.moia.router.ResponseEntity
@@ -17,7 +17,7 @@ class OpenApiValidatorTest {
 
     @Test
     fun `should handle and validate request`() {
-        val request = GET("/tests")
+        val request = get("/tests")
             .withHeaders(mapOf("Accept" to "application/json"))
 
         val response = testHandler.handleRequest(request, mockk())
@@ -29,7 +29,7 @@ class OpenApiValidatorTest {
 
     @Test
     fun `should fail on undocumented request`() {
-        val request = GET("/tests-not-documented")
+        val request = get("/tests-not-documented")
             .withHeaders(mapOf("Accept" to "application/json"))
 
         val response = testHandler.handleRequest(request, mockk())
@@ -40,7 +40,7 @@ class OpenApiValidatorTest {
 
     @Test
     fun `should fail on invalid schema`() {
-        val request = GET("/tests")
+        val request = get("/tests")
             .withHeaders(mapOf("Accept" to "application/json"))
 
         val response = TestInvalidRequestHandler()
@@ -54,10 +54,10 @@ class OpenApiValidatorTest {
         data class TestResponse(val name: String)
 
         override val router = Router.router {
-            GET("/tests") { _: Request<Unit> ->
+            get("/tests") { _: Request<Unit> ->
                 ResponseEntity.ok(TestResponse("Hello"))
             }
-            GET("/tests-not-documented") { _: Request<Unit> ->
+            get("/tests-not-documented") { _: Request<Unit> ->
                 ResponseEntity.ok(TestResponse("Hello"))
             }
         }
@@ -68,7 +68,7 @@ class OpenApiValidatorTest {
         data class TestResponseInvalid(val invalid: String)
 
         override val router = Router.router {
-            GET("/tests") { _: Request<Unit> ->
+            get("/tests") { _: Request<Unit> ->
                 ResponseEntity.ok(TestResponseInvalid("Hello"))
             }
         }

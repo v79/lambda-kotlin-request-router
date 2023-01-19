@@ -1,7 +1,7 @@
 package io.moia.router.openapi
 
 import io.mockk.mockk
-import io.moia.router.GET
+import io.moia.router.get
 import io.moia.router.Request
 import io.moia.router.RequestHandler
 import io.moia.router.ResponseEntity
@@ -16,7 +16,7 @@ class ValidatingRequestRouterWrapperTest {
     @Test
     fun `should return response on successful validation`() {
         val response = ValidatingRequestRouterWrapper(TestRequestHandler(), "openapi.yml")
-            .handleRequest(GET("/tests").withAcceptHeader("application/json"), mockk())
+            .handleRequest(get("/tests").withAcceptHeader("application/json"), mockk())
 
         then(response.statusCode).isEqualTo(200)
     }
@@ -25,7 +25,7 @@ class ValidatingRequestRouterWrapperTest {
     fun `should fail on response validation error`() {
         thenThrownBy {
             ValidatingRequestRouterWrapper(InvalidTestRequestHandler(), "openapi.yml")
-                .handleRequest(GET("/tests").withAcceptHeader("application/json"), mockk())
+                .handleRequest(get("/tests").withAcceptHeader("application/json"), mockk())
         }
             .isInstanceOf(OpenApiValidator.ApiInteractionInvalid::class.java)
             .hasMessageContaining("Response status 404 not defined for path")
@@ -35,7 +35,7 @@ class ValidatingRequestRouterWrapperTest {
     fun `should fail on request validation error`() {
         thenThrownBy {
             ValidatingRequestRouterWrapper(InvalidTestRequestHandler(), "openapi.yml")
-                .handleRequest(GET("/path-not-documented").withAcceptHeader("application/json"), mockk())
+                .handleRequest(get("/path-not-documented").withAcceptHeader("application/json"), mockk())
         }
             .isInstanceOf(OpenApiValidator.ApiInteractionInvalid::class.java)
             .hasMessageContaining("No API path found that matches request")
@@ -44,7 +44,7 @@ class ValidatingRequestRouterWrapperTest {
     @Test
     fun `should skip validation`() {
         val response = ValidatingRequestRouterWrapper(InvalidTestRequestHandler(), "openapi.yml")
-            .handleRequestSkippingRequestAndResponseValidation(GET("/path-not-documented").withAcceptHeader("application/json"), mockk())
+            .handleRequestSkippingRequestAndResponseValidation(get("/path-not-documented").withAcceptHeader("application/json"), mockk())
         then(response.statusCode).isEqualTo(404)
     }
 
@@ -56,7 +56,7 @@ class ValidatingRequestRouterWrapperTest {
                 specUrlOrPayload = "openapi.yml",
                 additionalRequestValidationFunctions = listOf({ _ -> throw RequestValidationFailedException() })
             )
-                .handleRequest(GET("/tests").withAcceptHeader("application/json"), mockk())
+                .handleRequest(get("/tests").withAcceptHeader("application/json"), mockk())
         }
             .isInstanceOf(RequestValidationFailedException::class.java)
     }
@@ -69,7 +69,7 @@ class ValidatingRequestRouterWrapperTest {
                 specUrlOrPayload = "openapi.yml",
                 additionalResponseValidationFunctions = listOf({ _, _ -> throw ResponseValidationFailedException() })
             )
-                .handleRequest(GET("/tests").withAcceptHeader("application/json"), mockk())
+                .handleRequest(get("/tests").withAcceptHeader("application/json"), mockk())
         }
             .isInstanceOf(ResponseValidationFailedException::class.java)
     }
@@ -79,7 +79,7 @@ class ValidatingRequestRouterWrapperTest {
 
     private class TestRequestHandler : RequestHandler() {
         override val router = router {
-            GET("/tests") { _: Request<Unit> ->
+            get("/tests") { _: Request<Unit> ->
                 ResponseEntity.ok("""{"name": "some"}""")
             }
         }
@@ -87,7 +87,7 @@ class ValidatingRequestRouterWrapperTest {
 
     private class InvalidTestRequestHandler : RequestHandler() {
         override val router = router {
-            GET("/tests") { _: Request<Unit> ->
+            get("/tests") { _: Request<Unit> ->
                 ResponseEntity.notFound(Unit)
             }
         }

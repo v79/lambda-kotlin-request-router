@@ -31,7 +31,7 @@ class RouterTest {
     @Test
     fun `should register get route with default accept header`() {
         val router = router {
-            GET("/some") { r: Request<Unit> ->
+            get("/some") { r: Request<Unit> ->
                 ResponseEntity.ok("""{"hello": "world", "request":"${r.body}"}""")
             }
         }
@@ -48,10 +48,10 @@ class RouterTest {
     @Test
     fun `should register routes`() {
         val router = router {
-            PUT("/some") { _: Request<Unit> -> ResponseEntity.ok("") }
-            PATCH("/some") { _: Request<Unit> -> ResponseEntity.ok("") }
-            DELETE("/some") { _: Request<Unit> -> ResponseEntity.ok("") }
-            POST("/some") { _: Request<Unit> -> ResponseEntity.ok("") }
+            put("/some") { _: Request<Unit> -> ResponseEntity.ok("") }
+            patch("/some") { _: Request<Unit> -> ResponseEntity.ok("") }
+            delete("/some") { _: Request<Unit> -> ResponseEntity.ok("") }
+            post("/some") { _: Request<Unit> -> ResponseEntity.ok("") }
         }
 
         then(router.routes.map { it.requestPredicate.method }).containsOnly("PUT", "PATCH", "DELETE", "POST")
@@ -60,7 +60,7 @@ class RouterTest {
     @Test
     fun `should register post route with specific content types`() {
         val router = router {
-            POST("/some") { r: Request<Unit> ->
+            post("/some") { r: Request<Unit> ->
                 ResponseEntity.ok("""{"hello": "world", "request":"${r.body}"}""")
             }
                 .producing("text/plain")
@@ -82,7 +82,7 @@ class RouterTest {
             defaultConsuming = setOf("text/plain")
             defaultProducing = setOf("text/plain")
 
-            POST("/some") { r: Request<Unit> ->
+            post("/some") { r: Request<Unit> ->
                 ResponseEntity.ok("""{"hello": "world", "request":"${r.body}"}""")
             }
         }
@@ -99,7 +99,7 @@ class RouterTest {
     @Test
     fun `should handle greedy path variables successfully`() {
         val router = router {
-            POST("/some/{proxy+}") { r: Request<Unit> ->
+            post("/some/{proxy+}") { r: Request<Unit> ->
                 ResponseEntity.ok("""{"hello": "world", "request":"${r.body}"}""")
             }
         }
@@ -112,7 +112,7 @@ class RouterTest {
     @Test
     fun `should not consume for a deletion route`() {
         val router = router {
-            DELETE("/delete-me") { _: Request<Unit> ->
+            delete("/delete-me") { _: Request<Unit> ->
                 ResponseEntity.ok(null)
             }
         }

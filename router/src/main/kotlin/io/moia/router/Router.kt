@@ -31,19 +31,19 @@ class Router {
 
     var filter: Filter = Filter.NoOp
 
-    fun <I, T> GET(pattern: String, handlerFunction: HandlerFunction<I, T>) =
+    fun <I, T> get(pattern: String, handlerFunction: HandlerFunction<I, T>) =
         defaultRequestPredicate(pattern, "GET", handlerFunction, emptySet())
 
-    fun <I, T> POST(pattern: String, handlerFunction: HandlerFunction<I, T>) =
+    fun <I, T> post(pattern: String, handlerFunction: HandlerFunction<I, T>) =
         defaultRequestPredicate(pattern, "POST", handlerFunction)
 
-    fun <I, T> PUT(pattern: String, handlerFunction: HandlerFunction<I, T>) =
+    fun <I, T> put(pattern: String, handlerFunction: HandlerFunction<I, T>) =
         defaultRequestPredicate(pattern, "PUT", handlerFunction)
 
-    fun <I, T> DELETE(pattern: String, handlerFunction: HandlerFunction<I, T>) =
+    fun <I, T> delete(pattern: String, handlerFunction: HandlerFunction<I, T>) =
         defaultRequestPredicate(pattern, "DELETE", handlerFunction, emptySet())
 
-    fun <I, T> PATCH(pattern: String, handlerFunction: HandlerFunction<I, T>) =
+    fun <I, T> patch(pattern: String, handlerFunction: HandlerFunction<I, T>) =
         defaultRequestPredicate(pattern, "PATCH", handlerFunction)
 
     private fun <I, T> defaultRequestPredicate(

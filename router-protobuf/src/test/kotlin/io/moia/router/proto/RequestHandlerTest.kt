@@ -7,7 +7,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import io.mockk.mockk
 import io.moia.router.ApiError
 import io.moia.router.ApiException
-import io.moia.router.GET
+import io.moia.router.get
 import io.moia.router.Request
 import io.moia.router.ResponseEntity
 import io.moia.router.Router.Companion.router
@@ -89,7 +89,7 @@ class RequestHandlerTest {
     @Test
     fun `should return 406-unacceptable error in proto`() {
         val response = testRequestHandler.handleRequest(
-            GET("/some-proto")
+            get("/some-proto")
                 .withHeaders(
                     mapOf(
                         "Accept" to "text/plain"
@@ -105,7 +105,7 @@ class RequestHandlerTest {
     @Test
     fun `should return api error in protos`() {
         val response = testRequestHandler.handleRequest(
-            GET("/some-error")
+            get("/some-error")
                 .withHeaders(
                     mapOf(
                         "Accept" to "application/x-protobuf"
@@ -129,13 +129,13 @@ class RequestHandlerTest {
 
             defaultContentType = "application/x-protobuf"
 
-            GET("/some-proto") { _: Request<Unit> -> ResponseEntity.ok(Sample.newBuilder().setHello("v1").build()) }
+            get("/some-proto") { _: Request<Unit> -> ResponseEntity.ok(Sample.newBuilder().setHello("v1").build()) }
                 .producing("application/vnd.moia.v1+x-protobuf", "application/vnd.moia.v1+json")
 
-            GET("/some-proto") { _: Request<Unit> -> ResponseEntity.ok(Sample.newBuilder().setHello("Hello").build()) }
+            get("/some-proto") { _: Request<Unit> -> ResponseEntity.ok(Sample.newBuilder().setHello("Hello").build()) }
                 .producing("application/x-protobuf", "application/json")
-            POST("/some-proto") { r: Request<Sample> -> ResponseEntity.ok(r.body) }
-            GET<Unit, Unit>("/some-error") { _: Request<Unit> -> throw ApiException("boom", "BOOM", 400) }
+            post("/some-proto") { r: Request<Sample> -> ResponseEntity.ok(r.body) }
+            get<Unit, Unit>("/some-error") { _: Request<Unit> -> throw ApiException("boom", "BOOM", 400) }
         }
 
         override fun createErrorBody(error: ApiError): Any =

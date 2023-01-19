@@ -28,7 +28,6 @@ import io.mockk.mockk
 import io.moia.router.Router.Companion.router
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import java.time.LocalDate
 
 class RequestHandlerTest {
@@ -98,7 +97,7 @@ class RequestHandlerTest {
     @Test
     fun `should handle request with body`() {
         val response = testRequestHandler.handleRequest(
-            POST("/some")
+            post("/some")
                 .withHeaders(
                     mapOf(
                         "Accept" to "application/json",
@@ -116,7 +115,7 @@ class RequestHandlerTest {
     @Test
     fun `should handle request with body as a List`() {
         val response = testRequestHandler.handleRequest(
-            POST("/somes")
+            post("/somes")
                 .withHeaders(
                     mapOf(
                         "Accept" to "application/json",
@@ -215,7 +214,7 @@ class RequestHandlerTest {
     @Test
     fun `should handle deserialization error`() {
         val response = testRequestHandler.handleRequest(
-            POST("/some")
+            post("/some")
                 .withHeaders(
                     mapOf(
                         "Accept" to "application/json",
@@ -231,7 +230,7 @@ class RequestHandlerTest {
     @Test
     fun `should handle deserialization error, when field has invalid format`() {
         val response = testRequestHandler.handleRequest(
-            POST("/some")
+            post("/some")
                 .withHeaders(
                     mapOf(
                         "Accept" to "application/json",
@@ -255,7 +254,7 @@ class RequestHandlerTest {
     @Test
     fun `should handle deserialization error, when field can not be parsed to class`() {
         val response = testRequestHandler.handleRequest(
-            POST("/some")
+            post("/some")
                 .withHeaders(
                     mapOf(
                         "Accept" to "application/json",
@@ -279,7 +278,7 @@ class RequestHandlerTest {
     @Test
     fun `should handle deserialization error, when json can not be parsed`() {
         val response = testRequestHandler.handleRequest(
-            POST("/some")
+            post("/some")
                 .withHeaders(
                     mapOf(
                         "Accept" to "application/json",
@@ -303,7 +302,7 @@ class RequestHandlerTest {
     @Test
     fun `should return 400 on missing body when content type stated`() {
         val response = testRequestHandler.handleRequest(
-            POST("/some")
+            post("/some")
                 .withHeaders(
                     mapOf(
                         "Accept" to "application/json",
@@ -320,7 +319,7 @@ class RequestHandlerTest {
     @Test
     fun `should handle null body when content type is stated and request handler body type is nullable`() {
         val response = testRequestHandler.handleRequest(
-            POST("/some-nullable")
+            post("/some-nullable")
                 .withHeaders(
                     mapOf(
                         "Accept" to "application/json",
@@ -363,7 +362,7 @@ class RequestHandlerTest {
     @Test
     fun `should handle request with a media type range in accept header`() {
         val response = testRequestHandler.handleRequest(
-            POST("/some")
+            post("/some")
                 .withHeaders(
                     mapOf(
                         "Accept" to "application/xhtml+xml, application/json, application/xml;q=0.9, image/webp, */*;q=0.8",
@@ -383,7 +382,7 @@ class RequestHandlerTest {
     @Test
     fun `should handle request with accept all header`() {
         val response = testRequestHandler.handleRequest(
-            POST("/some")
+            post("/some")
                 .withHeaders(
                     mapOf(
                         "Accept" to "*/*",
@@ -403,7 +402,7 @@ class RequestHandlerTest {
     @Test
     fun `should handle subtype structured suffix wildcard`() {
         val response = testRequestHandler.handleRequest(
-            POST("/some")
+            post("/some")
                 .withHeaders(
                     mapOf(
                         "Accept" to "application/vnd.moia.v1+json",
@@ -421,7 +420,7 @@ class RequestHandlerTest {
     @Test
     fun `should match version`() {
         val response = testRequestHandler.handleRequest(
-            POST("/some")
+            post("/some")
                 .withHeaders(
                     mapOf(
                         "Accept" to "application/vnd.moia.v2+json",
@@ -440,7 +439,7 @@ class RequestHandlerTest {
     @Test
     fun `should fail with 406 Not Acceptable on an unparsable media type`() {
         val response = testRequestHandler.handleRequest(
-            POST("/some")
+            post("/some")
                 .withHeaders(
                     mapOf(
                         "Accept" to "*",
@@ -457,7 +456,7 @@ class RequestHandlerTest {
     @Test
     fun `should match request requiring permission`() {
         val response = TestRequestHandlerAuthorization().handleRequest(
-            GET("/some")
+            get("/some")
                 .withHeaders(
                     mapOf(
                         "Accept" to "application/json",
@@ -473,7 +472,7 @@ class RequestHandlerTest {
     @Test
     fun `should match request requiring permission from custom header`() {
         val response = TestRequestHandlerCustomAuthorizationHeader().handleRequest(
-            GET("/some")
+            get("/some")
                 .withHeaders(
                     mapOf(
                         "Accept" to "application/json",
@@ -489,7 +488,7 @@ class RequestHandlerTest {
     @Test
     fun `should fail on missing permission`() {
         val response = TestRequestHandlerAuthorization().handleRequest(
-            GET("/some")
+            get("/some")
                 .withHeaders(
                     mapOf(
                         "Accept" to "application/json",
@@ -505,7 +504,7 @@ class RequestHandlerTest {
     @Test
     fun `Request without headers should return status code 406`() {
         val response = testRequestHandler.handleRequest(
-            GET("/some"),
+            get("/some"),
             mockk()
         )
         assertThat(response.statusCode).isEqualTo(406)
@@ -514,7 +513,7 @@ class RequestHandlerTest {
     @Test
     fun `Request without request path should return status code 404`() {
         val response = testRequestHandler.handleRequest(
-            GET(),
+            get(),
             mockk()
         )
         assertThat(response.statusCode).isEqualTo(404)
@@ -523,7 +522,7 @@ class RequestHandlerTest {
     @Test
     fun `Successful POST request should return status code 204`() {
         val response = testRequestHandler.handleRequest(
-            POST("/no-content")
+            post("/no-content")
                 .withHeader("Accept", "application/json")
                 .withHeader("Content-Type", "application/json")
                 .withBody("""{ "greeting": "some" }"""),
@@ -536,7 +535,7 @@ class RequestHandlerTest {
     @Test
     fun `Create should not return a location header`() {
         val response = testRequestHandler.handleRequest(
-            POST("/create-without-location")
+            post("/create-without-location")
                 .withHeader("Accept", "application/json")
                 .withHeader("Content-Type", "application/json")
                 .withBody("""{ "greeting": "some" }"""),
@@ -549,7 +548,7 @@ class RequestHandlerTest {
     @Test
     fun `Create should return a location header`() {
         val response = testRequestHandler.handleRequest(
-            POST("/create-with-location")
+            post("/create-with-location")
                 .withHeader("Accept", "application/json")
                 .withHeader("Content-Type", "application/json")
                 .withBody("""{ "greeting": "some" }"""),
@@ -563,7 +562,7 @@ class RequestHandlerTest {
     @Test
     fun `Deletion should ignore the body and content-type`() {
         val response = testRequestHandler.handleRequest(
-            DELETE("/delete-me")
+            delete("/delete-me")
                 .withHeader("Accept", "application/json")
                 .withHeader("Content-Type", "text/csv")
                 .withBody("this may be faulty"),
@@ -575,7 +574,7 @@ class RequestHandlerTest {
     @Test
     fun `Should handle query parameters successfully`() {
         TestQueryParamParsingHandler().handleRequest(
-            GET("/search")
+            get("/search")
                 .withQueryStringParameters(
                     mapOf(
                         "testQueryParam" to "foo"
@@ -589,7 +588,7 @@ class RequestHandlerTest {
             mockk()
         )
         TestQueryParamParsingHandler().handleRequest(
-            GET("/search?testQueryParam=foo&testMultiValueQueryStringParam=foo&testMultiValueQueryStringParam=bar"),
+            get("/search?testQueryParam=foo&testMultiValueQueryStringParam=foo&testMultiValueQueryStringParam=bar"),
             mockk()
         )
     }
@@ -597,7 +596,7 @@ class RequestHandlerTest {
     @Test
     fun `Not existing path parameter should throw an error`() {
         val response = testRequestHandler.handleRequest(
-            GET("/non-existing-path-parameter")
+            get("/non-existing-path-parameter")
                 .withHeader("accept", "application/json"),
             mockk()
         )
@@ -608,7 +607,7 @@ class RequestHandlerTest {
     @Test
     fun `should return the content type that is accepted`() {
         val jsonResponse = AcceptTypeDependingHandler().handleRequest(
-            GET("/all-objects")
+            get("/all-objects")
                 .withHeader("accept", "application/json"),
             mockk()
         )
@@ -616,7 +615,7 @@ class RequestHandlerTest {
         assertEquals("application/json", jsonResponse.getHeaderCaseInsensitive("content-type"))
         assertEquals("[{\"text\":\"foo\",\"number\":1},{\"text\":\"bar\",\"number\":2}]", jsonResponse.body)
         val plainTextResponse = AcceptTypeDependingHandler().handleRequest(
-            GET("/all-objects")
+            get("/all-objects")
                 .withHeader("accept", "text/plain"),
             mockk()
         )
@@ -650,12 +649,12 @@ class RequestHandlerTest {
     fun `should deserialize plain text`() {
         class SampleRouter : RequestHandler() {
             override val router = router {
-                POST("/some", { r: Request<String> -> ResponseEntity.ok(r.body) })
+                post("/some", { r: Request<String> -> ResponseEntity.ok(r.body) })
                     .producing("text/plain")
                     .consuming("text/plain")
             }
         }
-        val request = POST("/some")
+        val request = post("/some")
             .withAcceptHeader("text/plain")
             .withContentTypeHeader("text/plain")
             .withBody("just text")
@@ -668,17 +667,16 @@ class RequestHandlerTest {
     }
 
     @Test
-    fun `should fail for function references when using Kotlin 1_6_10`() {
+    fun `should succeed for function references when using Kotlin 1_6_10`() {
         class DummyHandler : RequestHandler() {
             val dummy = object {
-                fun handler(r: Request<Unit>) = ResponseEntity.ok(Unit)
+                fun handler(r: Request<String>) = ResponseEntity.ok(Unit)
             }
             override fun exceptionToResponseEntity(ex: Exception) = throw ex
             override val router = router {
-                GET("/some", dummy::handler).producing("application/json")
+                get("/some", dummy::handler).producing("application/json")
             }
         }
-        assertThrows<IllegalArgumentException> {
             DummyHandler().handleRequest(
                 APIGatewayProxyRequestEvent()
                     .withHttpMethod("GET")
@@ -686,12 +684,11 @@ class RequestHandlerTest {
                     .withAcceptHeader("application/json"),
                 mockk()
             )
-        }
     }
 
     class TestRequestHandlerAuthorization : RequestHandler() {
         override val router = router {
-            GET("/some") { _: Request<Unit> ->
+            get("/some") { _: Request<Unit> ->
                 ResponseEntity.ok("hello")
             }.requiringPermissions("permission1")
         }
@@ -708,7 +705,7 @@ class RequestHandlerTest {
 
     class TestRequestHandlerCustomAuthorizationHeader : RequestHandler() {
         override val router = router {
-            GET("/some") { _: Request<Unit> ->
+            get("/some") { _: Request<Unit> ->
                 ResponseEntity.ok("hello")
             }.requiringPermissions("permission1")
         }
@@ -739,10 +736,10 @@ class RequestHandlerTest {
         override val router = router {
             filter = incrementingFilter.then(incrementingFilter)
 
-            GET("/some") { _: Request<Unit> ->
+            get("/some") { _: Request<Unit> ->
                 ResponseEntity.ok("hello")
             }
-            GET<Unit, Unit>("/some-internal-server-error") {
+            get<Unit, Unit>("/some-internal-server-error") {
                 throw IllegalArgumentException("boom")
             }
         }
@@ -754,20 +751,20 @@ class RequestHandlerTest {
         data class TestRequest(val greeting: String, val age: Int = 0, val bday: LocalDate = LocalDate.now())
 
         override val router = router {
-            GET("/some") { _: Request<Unit> ->
+            get("/some") { _: Request<Unit> ->
                 ResponseEntity.ok(
                     TestResponse(
                         "Hello"
                     )
                 )
             }
-            GET<Unit, Unit>("/some-api-exception") {
+            get<Unit, Unit>("/some-api-exception") {
                 throw ApiException("boom", "BOOM", 400, mapOf("more" to "info"))
             }
-            GET<Unit, Unit>("/some-internal-server-error") {
+            get<Unit, Unit>("/some-internal-server-error") {
                 throw IllegalArgumentException("boom")
             }
-            GET("/some/{id}") { r: Request<Unit> ->
+            get("/some/{id}") { r: Request<Unit> ->
                 assertThat(r.pathParameters.containsKey("id")).isTrue()
                 ResponseEntity.ok(
                     TestResponse(
@@ -776,7 +773,7 @@ class RequestHandlerTest {
                 )
             }
 
-            POST("/some") { _: Request<TestRequest> ->
+            post("/some") { _: Request<TestRequest> ->
                 ResponseEntity.ok(
                     TestResponse(
                         "v2"
@@ -784,7 +781,7 @@ class RequestHandlerTest {
                 )
             }.producing("application/vnd.moia.v2+json")
 
-            POST("/some") { r: Request<TestRequest> ->
+            post("/some") { r: Request<TestRequest> ->
                 ResponseEntity.ok(
                     TestResponse(
                         r.body.greeting
@@ -792,7 +789,7 @@ class RequestHandlerTest {
                 )
             }.producing("application/json", "application/*+json")
 
-            POST("/some-nullable") { r: Request<TestRequest?> ->
+            post("/some-nullable") { r: Request<TestRequest?> ->
                 ResponseEntity.ok(
                     TestResponse(
                         r.body?.greeting.orEmpty()
@@ -800,7 +797,7 @@ class RequestHandlerTest {
                 )
             }.producing("application/json")
 
-            POST("/somes") { r: Request<List<TestRequest>> ->
+            post("/somes") { r: Request<List<TestRequest>> ->
                 ResponseEntity.ok(
                     r.body.map {
                         TestResponse(
@@ -809,19 +806,19 @@ class RequestHandlerTest {
                     }.toList()
                 )
             }
-            POST("/no-content") { _: Request<TestRequest> ->
+            post("/no-content") { _: Request<TestRequest> ->
                 ResponseEntity.noContent()
             }
-            POST("/create-without-location") { _: Request<TestRequest> ->
+            post("/create-without-location") { _: Request<TestRequest> ->
                 ResponseEntity.created(null, null, emptyMap())
             }
-            POST("/create-with-location") { r: Request<TestRequest> ->
+            post("/create-with-location") { r: Request<TestRequest> ->
                 ResponseEntity.created(null, r.apiRequest.location("test"), emptyMap())
             }
-            DELETE("/delete-me") { _: Request<Unit> ->
+            delete("/delete-me") { _: Request<Unit> ->
                 ResponseEntity.noContent()
             }
-            GET("/non-existing-path-parameter") { request: Request<Unit> ->
+            get("/non-existing-path-parameter") { request: Request<Unit> ->
                 request.getPathParameter("foo")
                 ResponseEntity.ok(null)
             }
@@ -831,7 +828,7 @@ class RequestHandlerTest {
     class TestQueryParamParsingHandler : RequestHandler() {
 
         override val router = router {
-            GET("/search") { r: Request<TestRequestHandler.TestRequest> ->
+            get("/search") { r: Request<TestRequestHandler.TestRequest> ->
                 assertThat(r.getQueryParameter("testQueryParam")).isNotNull()
                 assertThat(r.getQueryParameter("testQueryParam")).isEqualTo("foo")
                 assertThat(r.queryParameters!!["testQueryParam"]).isNotNull()
@@ -850,7 +847,7 @@ class RequestHandlerTest {
         override val router = router {
             defaultConsuming = setOf("application/json", "text/plain")
             defaultProducing = setOf("application/json", "text/plain")
-            GET("/all-objects") { _: Request<Unit> ->
+            get("/all-objects") { _: Request<Unit> ->
                 ResponseEntity.ok(body = listOf(CustomObject("foo", 1), CustomObject("bar", 2)))
             }
         }
